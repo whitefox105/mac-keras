@@ -15,6 +15,7 @@ RUN curl -qsSLkO \
 ENV PATH=/root/miniconda2/bin:$PATH
 
 RUN conda install -y \
+    python=3.5.4 \
     h5py \
     pandas \
     theano \
