@@ -5,6 +5,9 @@ RUN apt-get update \
     build-essential \
     curl \
     git \
+    libsm6 \
+    bxext6 \
+    libxrender1 \
   && rm -rf /var/lib/apt/lists/*
 
 RUN curl -qsSLkO \
@@ -19,15 +22,17 @@ RUN conda install -y \
     h5py \
     pandas \
     theano \
-  && conda clean --yes --tarballs --packages --source-cache \
+    jupyter \
+    matplotlib \
+    seaborn \
+  && conda clean --yes --tarballs --packages --source-cache
+
+RUN pip install --upgrade pip \
+  && pip install sklearn pillow tqdm \
+  && pip install opencv-python \
   && pip install tensorflow==1.1.0 \
   && pip install --upgrade -I setuptools \
   && pip install --upgrade keras
-
-RUN conda install -y \
-    jupyter \
-    matplotlib \
-    seaborn
 
 VOLUME /notebook
 WORKDIR /notebook
