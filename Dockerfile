@@ -5,8 +5,9 @@ RUN apt-get update \
     build-essential \
     curl \
     git \
+    unzip \
     libsm6 \
-    bxext6 \
+    libxext6 \
     libxrender1 \
   && rm -rf /var/lib/apt/lists/*
 
@@ -28,13 +29,17 @@ RUN conda install -y \
   && conda clean --yes --tarballs --packages --source-cache
 
 RUN pip install --upgrade pip \
-  && pip install sklearn pillow tqdm \
-  && pip install opencv-python \
   && pip install tensorflow==1.1.0 \
   && pip install --upgrade -I setuptools \
   && pip install --upgrade keras
 
-VOLUME /notebook
-WORKDIR /notebook
+WORKDIR /home/root
+
+RUN pip install sklearn pillow tqdm beautifulsoup4 opencv-python \
+  && curl -LOks https://github.com/pierluigiferrari/ssd_keras/archive/master.zip \
+  && unzip master.zip \
+  && rm master.zip
+
+VOLUME /home/root/notebooks
 EXPOSE 8888
 CMD jupyter notebook --no-browser --ip=0.0.0.0 --allow-root --NotebookApp.token=
